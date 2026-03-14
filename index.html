@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wahlhilfe – Welche Partei passt zu mir?</title>
+  <meta name="description" content="Beantworte 15 Fragen und erfahre sofort, welche deutsche Partei am besten zu deinen politischen Ansichten passt.">
+  <meta property="og:title" content="Welche Partei passt zu mir? – Kostenlose Wahlhilfe">
+  <meta property="og:description" content="15 Fragen – sofortiges Ergebnis – anonym. Jetzt mitmachen!">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root{--font:'DM Sans',sans-serif;--text-xs:clamp(0.75rem,0.7rem + 0.25vw,0.875rem);--text-sm:clamp(0.875rem,0.82rem + 0.28vw,1rem);--text-base:clamp(1rem,0.95rem + 0.25vw,1.125rem);--text-lg:clamp(1.125rem,1rem + 0.65vw,1.4rem);--text-xl:clamp(1.4rem,1.1rem + 1.2vw,2rem);--text-2xl:clamp(1.8rem,1.2rem + 2vw,2.8rem);--s1:.25rem;--s2:.5rem;--s3:.75rem;--s4:1rem;--s5:1.25rem;--s6:1.5rem;--s8:2rem;--s10:2.5rem;--s12:3rem;--r-sm:.375rem;--r-md:.6rem;--r-lg:1rem;--r-xl:1.5rem;--r-full:9999px;--ease:180ms cubic-bezier(.16,1,.3,1)}
+    :root,[data-theme=light]{--bg:#f7f6f2;--surface:#fff;--surface2:#f3f0ec;--border:#d4d1ca;--text:#28251d;--muted:#7a7974;--faint:#bab9b4;--primary:#01696f;--primary-h:#0c4e54;--primary-l:#e0f0f0;--shadow-sm:0 1px 3px rgba(0,0,0,.07);--shadow-md:0 4px 16px rgba(0,0,0,.1);--shadow-lg:0 8px 32px rgba(0,0,0,.13)}
+    [data-theme=dark]{--bg:#171614;--surface:#1c1b19;--surface2:#201f1d;--border:#393836;--text:#cdccca;--muted:#797876;--faint:#5a5957;--primary:#4f98a3;--primary-h:#227f8b;--primary-l:#1e3335;--shadow-sm:0 1px 3px rgba(0,0,0,.3);--shadow-md:0 4px 16px rgba(0,0,0,.4);--shadow-lg:0 8px 32px rgba(0,0,0,.5)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:none}
+    body{font-family:var(--font);font-size:var(--text-base);color:var(--text);background:var(--bg);min-height:100dvh;-webkit-font-smoothing:antialiased;line-height:1.6}
+    button{cursor:pointer;font:inherit;border:none;background:none;color:inherit}
+    nav{position:sticky;top:0;z-index:100;background:var(--primary);padding:var(--s3) var(--s5);display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-md)}
+    .nav-title{color:#fff;font-weight:700;font-size:var(--text-sm)}
+    .theme-btn{color:#fff;opacity:.8;width:36px;height:36px;border-radius:var(--r-full);display:flex;align-items:center;justify-content:center}
+    .progress-bar{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.2)}
+    .progress-fill{height:100%;background:rgba(255,255,255,.85);transition:width .5s ease;width:0%}
+    .hero{background:var(--primary);color:#fff;text-align:center;padding:var(--s10) var(--s5) var(--s12)}
+    .hero h1{font-size:var(--text-2xl);font-weight:700;line-height:1.15;margin-bottom:var(--s4)}
+    .hero p{font-size:var(--text-sm);opacity:.85;max-width:420px;margin:0 auto var(--s6)}
+    .hero-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--s3);margin-bottom:var(--s8)}
+    .hero-chip{background:rgba(255,255,255,.15);color:#fff;font-size:var(--text-xs);padding:var(--s1) var(--s3);border-radius:var(--r-full);border:1px solid rgba(255,255,255,.25)}
+    .start-btn{display:inline-flex;align-items:center;gap:var(--s2);background:#fff;color:var(--primary);font-weight:700;font-size:var(--text-base);padding:var(--s4) var(--s8);border-radius:var(--r-full);box-shadow:var(--shadow-lg)}
+    .wrap{max-width:680px;margin:0 auto;padding:0 var(--s4) var(--s12)}
+    .screen{display:none}.screen.active{display:block}
+    .q-header{margin:var(--s8) 0 var(--s5);text-align:center}
+    .q-counter{font-size:var(--text-xs);color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:var(--s2)}
+    .q-category{display:inline-block;background:var(--primary-l);color:var(--primary);font-size:var(--text-xs);font-weight:700;padding:var(--s1) var(--s3);border-radius:var(--r-full);margin-bottom:var(--s3)}
+    .q-text{font-size:var(--text-lg);font-weight:600;color:var(--text);line-height:1.3}
+    .q-sub{font-size:var(--text-sm);color:var(--muted);margin-top:var(--s2)}
+    .answer-grid{display:flex;flex-direction:column;gap:var(--s2);margin-bottom:var(--s6)}
+    .answer-btn{display:flex;align-items:center;gap:var(--s4);padding:var(--s4) var(--s5);border:2px solid var(--border);border-radius:var(--r-lg);background:var(--surface);color:var(--text);font-size:var(--text-sm);font-weight:500;text-align:left;width:100%;transition:all var(--ease)}
+    .answer-btn:hover{border-color:var(--primary);background:var(--primary-l)}
+    .answer-btn.selected{border-color:var(--primary);background:var(--primary-l);color:var(--primary)}
+    .answer-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;background:var(--surface2)}
+    .answer-btn.selected .answer-icon{background:var(--primary);color:#fff}
+    .answer-label{flex:1}.answer-label strong{display:block;font-weight:600}
+    .answer-label span{display:block;font-size:var(--text-xs);color:var(--muted);margin-top:2px}
+    .nav-btns{display:flex;justify-content:space-between;gap:var(--s3);margin-top:var(--s2)}
+    .btn-back{padding:var(--s3) var(--s5);border:2px solid var(--border);border-radius:var(--r-full);color:var(--muted);font-weight:600;font-size:var(--text-sm)}
+    .btn-next{flex:1;padding:var(--s3) var(--s5);background:var(--primary);color:#fff;border-radius:var(--r-full);font-weight:700;font-size:var(--text-sm);opacity:.4;pointer-events:none}
+    .btn-next.ready{opacity:1;pointer-events:auto}
+    .result-hero{text-align:center;padding:var(--s8) 0 var(--s6)}
+    .result-hero h2{font-size:var(--text-xl);font-weight:700;margin-bottom:var(--s2)}
+    .result-hero p{color:var(--muted);font-size:var(--text-sm);max-width:420px;margin:0 auto}
+    .winner-card{background:var(--surface);border:3px solid var(--primary);border-radius:var(--r-xl);padding:var(--s6) var(--s5);margin-bottom:var(--s5);box-shadow:var(--shadow-lg);text-align:center;position:relative}
+    .winner-badge{position:absolute;top:var(--s3);right:var(--s3);background:var(--primary);color:#fff;font-size:var(--text-xs);font-weight:700;padding:2px var(--s3);border-radius:var(--r-full)}
+    .winner-emoji{font-size:4rem;margin-bottom:var(--s3)}
+    .winner-name{font-size:var(--text-xl);font-weight:800;color:var(--primary);margin-bottom:var(--s2)}
+    .winner-score-bar{background:var(--surface2);border-radius:var(--r-full);height:10px;margin:var(--s3) auto;max-width:300px;overflow:hidden}
+    .winner-score-fill{height:100%;background:var(--primary);border-radius:var(--r-full);transition:width 1s ease}
+    .winner-score-label{font-size:var(--text-sm);color:var(--muted);font-weight:600}
+    .winner-desc{font-size:var(--text-sm);color:var(--muted);margin-top:var(--s4);font-style:italic}
+    .all-results{margin-top:var(--s6)}
+    .all-results h3{font-size:var(--text-xs);font-weight:700;margin-bottom:var(--s4);color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+    .result-row{display:flex;align-items:center;gap:var(--s3);margin-bottom:var(--s3);padding:var(--s3) var(--s4);background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg)}
+    .result-rank{width:28px;height:28px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:var(--text-xs);font-weight:700;color:var(--muted);flex-shrink:0}
+    .result-rank.gold{background:#ffc107;color:#fff}.result-rank.silver{background:#9e9e9e;color:#fff}.result-rank.bronze{background:#cd7f32;color:#fff}
+    .result-emoji{font-size:1.5rem;flex-shrink:0}
+    .result-info{flex:1;min-width:0}.result-name{font-weight:700;font-size:var(--text-sm);color:var(--text)}
+    .result-bar-wrap{margin-top:4px;background:var(--surface2);border-radius:var(--r-full);height:6px;overflow:hidden}
+    .result-bar{height:100%;border-radius:var(--r-full);transition:width 1.2s ease}
+    .result-pct{font-size:var(--text-xs);font-weight:700;color:var(--primary);white-space:nowrap;flex-shrink:0}
+    .analysis-section{margin-top:var(--s8)}.analysis-section h3{font-size:var(--text-base);font-weight:700;margin-bottom:var(--s4);color:var(--text)}
+    .analysis-grid{display:grid;gap:var(--s3)}
+    .analysis-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--s4)}
+    .analysis-topic{font-size:var(--text-xs);font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:var(--s1)}
+    .analysis-answer{font-size:var(--text-sm);color:var(--text);font-weight:500}
+    .analysis-match{font-size:var(--text-xs);color:var(--muted);margin-top:var(--s1)}
+    .restart-btn{display:block;width:100%;margin-top:var(--s8);padding:var(--s4);background:var(--primary);color:#fff;border-radius:var(--r-lg);font-weight:700;font-size:var(--text-base);text-align:center}
+    .disclaimer{margin-top:var(--s6);background:var(--surface2);border-radius:var(--r-lg);padding:var(--s4);font-size:var(--text-xs);color:var(--muted);line-height:1.6}
+    footer{text-align:center;padding:var(--s8) var(--s4);font-size:var(--text-xs);color:var(--faint)}
+    footer a{color:var(--faint);text-decoration:underline}
+  </style>
+</head>
+<body>
+<nav style="position:relative">
+  <span class="nav-title">🗳️ Wahlhilfe Deutschland</span>
+  <button class="theme-btn" data-theme-toggle aria-label="Design wechseln">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  </button>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</nav>
+<div id="screen-hero" class="screen active">
+  <div class="hero">
+    <div style="font-size:3rem;margin-bottom:1rem">🗳️</div>
+    <h1>Welche Partei passt zu mir?</h1>
+    <p>Beantworte 15 kurze Fragen und erfahre sofort, welche deutsche Partei am besten zu deinen politischen Ansichten passt.</p>
+    <div class="hero-chips">
+      <span class="hero-chip">🔒 100 % anonym</span>
+      <span class="hero-chip">⏱️ ~3 Minuten</span>
+      <span class="hero-chip">📱 Für Smartphone</span>
+      <span class="hero-chip">7 Parteien verglichen</span>
+    </div>
+    <button class="start-btn" onclick="startQuiz()">
+      <span>Jetzt starten</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+  <footer><p style="margin-bottom:4px">Diese Wahlhilfe ist unabhängig und nicht mit Parteien verbunden.</p><a href="https://www.perplexity.ai/computer" target="_blank">Created with Perplexity Computer</a></footer>
+</div>
+<div id="screen-quiz" class="screen">
+  <div class="wrap">
+    <div class="q-header">
+      <div class="q-counter" id="qCounter">Frage 1 von 15</div>
+      <div class="q-category" id="qCategory">Wirtschaft</div>
+      <div class="q-text" id="qText"></div>
+      <div class="q-sub" id="qSub"></div>
+    </div>
+    <div class="answer-grid" id="answerGrid"></div>
+    <div class="nav-btns">
+      <button class="btn-back" id="btnBack" onclick="prevQuestion()">← Zurück</button>
+      <button class="btn-next" id="btnNext" onclick="nextQuestion()">Weiter →</button>
+    </div>
+  </div>
+</div>
+<div id="screen-result" class="screen">
+  <div class="wrap">
+    <div class="result-hero"><h2>Ihr Ergebnis</h2><p>Basierend auf Ihren Antworten haben wir die Übereinstimmung mit 7 deutschen Parteien berechnet.</p></div>
+    <div id="winnerCard"></div>
+    <div class="all-results"><h3>Alle Parteien im Vergleich</h3><div id="allResults"></div></div>
+    <div class="analysis-section"><h3>Ihre Antworten im Überblick</h3><div class="analysis-grid" id="analysisGrid"></div></div>
+    <div class="disclaimer"><strong>Hinweis:</strong> Diese Wahlhilfe basiert auf vereinfachten Parteipositionen und dient nur zur Orientierung.</div>
+    <button class="restart-btn" onclick="restartQuiz()">🔄 Erneut machen</button>
+    <footer style="margin-top:2rem"><a href="https://www.perplexity.ai/computer" target="_blank">Created with Perplexity Computer</a></footer>
+  </div>
+</div>
+<script>
+const PARTIES=[{id:"cdu",name:"CDU/CSU",emoji:"🖤",color:"#333",desc:"Christlich-demokratisch, wirtschaftsliberal, konservativ."},{id:"spd",name:"SPD",emoji:"❤️",color:"#e2001a",desc:"Sozialdemokratisch, Fokus auf Sozialstaat und Arbeitnehmerrechte."},{id:"gruene",name:"Grüne",emoji:"💚",color:"#46962b",desc:"Ökologisch, progressiv, Klimaschutz als zentrale Priorität."},{id:"fdp",name:"FDP",emoji:"💛",color:"#c8a800",desc:"Liberal, marktwirtschaftlich, weniger Staat, Eigenverantwortung."},{id:"afd",name:"AfD",emoji:"🔵",color:"#009ee0",desc:"Nationalkonservativ, strikte Migrationsbegrenzung."},{id:"bsw",name:"BSW",emoji:"🟣",color:"#9b1d91",desc:"Sozial und konservativ, gegen Waffenlieferungen, Frieden."},{id:"linke",name:"Die Linke",emoji:"🌹",color:"#be3075",desc:"Sozialistisch, Umverteilung, starker Sozialstaat."}];
+const QUESTIONS=[
+{id:"q01",category:"Wirtschaft",text:"Wie soll der Staat mit der Wirtschaft umgehen?",sub:"Welche Wirtschaftspolitik bevorzugen Sie?",options:[{val:"a",icon:"🏭",label:"Mehr Staatskontrolle",desc:"Staat soll aktiv eingreifen, Unternehmen regulieren"},{val:"b",icon:"⚖️",label:"Ausgewogener Mittelweg",desc:"Soziale Marktwirtschaft: Markt + staatliche Absicherung"},{val:"c",icon:"🏪",label:"Freie Marktwirtschaft",desc:"Weniger Staat, mehr Eigenverantwortung und Wettbewerb"}],scores:{a:{cdu:0,spd:1,gruene:1,fdp:0,afd:0,bsw:2,linke:2},b:{cdu:2,spd:2,gruene:1,fdp:0,afd:1,bsw:1,linke:1},c:{cdu:1,spd:0,gruene:0,fdp:2,afd:1,bsw:0,linke:0}}},
+{id:"q02",category:"Steuern",text:"Wie sollen Reiche und Großunternehmen besteuert werden?",sub:"",options:[{val:"a",icon:"📈",label:"Deutlich höher besteuern",desc:"Hohe Steuern auf Vermögen und große Einkommen"},{val:"b",icon:"📊",label:"Moderat anpassen",desc:"Kleine Korrekturen, aktuelle Sätze beibehalten"},{val:"c",icon:"📉",label:"Steuern senken",desc:"Niedrigere Steuern für Unternehmen und Leistungsträger"}],scores:{a:{cdu:0,spd:1,gruene:2,fdp:0,afd:0,bsw:2,linke:2},b:{cdu:2,spd:2,gruene:1,fdp:1,afd:1,bsw:1,linke:0},c:{cdu:1,spd:0,gruene:0,fdp:2,afd:2,bsw:0,linke:0}}},
+{id:"q03",category:"Klimaschutz",text:"Wie dringend ist der Klimaschutz?",sub:"",options:[{val:"a",icon:"🌍",label:"Höchste Priorität",desc:"Sofortige Maßnahmen, Kohle- und Ölausstieg"},{val:"b",icon:"🌱",label:"Wichtig, aber schrittweise",desc:"Klimaziele einhalten, wirtschaftliche Machbarkeit beachten"},{val:"c",icon:"🏭",label:"Weniger strenge Vorgaben",desc:"Wirtschaft und Arbeitsplätze haben Vorrang"}],scores:{a:{cdu:0,spd:1,gruene:2,fdp:0,afd:0,bsw:0,linke:2},b:{cdu:2,spd:2,gruene:1,fdp:1,afd:0,bsw:1,linke:1},c:{cdu:1,spd:0,gruene:0,fdp:1,afd:2,bsw:1,linke:0}}},
+{id:"q04",category:"Migration",text:"Wie soll Deutschland mit Einwanderung umgehen?",sub:"",options:[{val:"a",icon:"🌐",label:"Offene Grenzen & Integration",desc:"Großzügige Aufnahme, Integrationsprogramme, Vielfalt"},{val:"b",icon:"📋",label:"Geregelte Zuwanderung",desc:"Fachkräfte aufnehmen, Asylmissbrauch bekämpfen"},{val:"c",icon:"🚧",label:"Starke Begrenzung",desc:"Massiv weniger Einwanderung, harte Grenzkontrollen"}],scores:{a:{cdu:0,spd:1,gruene:2,fdp:1,afd:0,bsw:0,linke:2},b:{cdu:2,spd:1,gruene:0,fdp:1,afd:0,bsw:1,linke:0},c:{cdu:1,spd:0,gruene:0,fdp:0,afd:2,bsw:2,linke:0}}},
+{id:"q05",category:"Sozialstaat",text:"Wie soll das Bürgergeld gestaltet sein?",sub:"",options:[{val:"a",icon:"🤝",label:"Ausbauen & erhöhen",desc:"Höhere Leistungen, mehr Würde, weniger Sanktionen"},{val:"b",icon:"⚖️",label:"Fördern & Fordern",desc:"Unterstützung mit Gegenleistung verknüpfen"},{val:"c",icon:"❌",label:"Abschaffen & ersetzen",desc:"Durch ein strikteres System ersetzen"}],scores:{a:{cdu:0,spd:2,gruene:2,fdp:0,afd:0,bsw:1,linke:2},b:{cdu:2,spd:1,gruene:0,fdp:1,afd:1,bsw:1,linke:0},c:{cdu:1,spd:0,gruene:0,fdp:2,afd:2,bsw:0,linke:0}}},
+{id:"q06",category:"Rente",text:"Wie soll das Rentensystem reformiert werden?",sub:"",options:[{val:"a",icon:"👴",label:"Gesetzliche Rente stärken",desc:"Höhere Beiträge, Rente für alle ausbauen"},{val:"b",icon:"🏦",label:"Mix aus gesetzlich & privat",desc:"Rente stabilisieren und private Vorsorge fördern"},{val:"c",icon:"📈",label:"Mehr Eigenvorsorge",desc:"Kapitalgedeckte Rente stärken"}],scores:{a:{cdu:0,spd:2,gruene:1,fdp:0,afd:1,bsw:2,linke:2},b:{cdu:2,spd:1,gruene:1,fdp:1,afd:1,bsw:1,linke:0},c:{cdu:1,spd:0,gruene:0,fdp:2,afd:0,bsw:0,linke:0}}},
+{id:"q07",category:"Bildung",text:"Wie soll Bildung in Deutschland finanziert werden?",sub:"",options:[{val:"a",icon:"🎓",label:"Vollständig kostenlos",desc:"Keine Gebühren, gebührenfreie Kitas und Unis"},{val:"b",icon:"🏫",label:"Mehr Bundesinvestitionen",desc:"Bund soll stärker investieren, Bildungsschere abbauen"},{val:"c",icon:"🏆",label:"Leistungsprinzip stärken",desc:"Mehr Wettbewerb, private Träger stärken"}],scores:{a:{cdu:0,spd:1,gruene:2,fdp:0,afd:0,bsw:2,linke:2},b:{cdu:2,spd:2,gruene:1,fdp:0,afd:1,bsw:1,linke:1},c:{cdu:1,spd:0,gruene:0,fdp:2,afd:1,bsw:0,linke:0}}},
+{id:"q08",category:"Energie",text:"Wie soll Deutschland seine Energie erzeugen?",sub:"",options:[{val:"a",icon:"☀️",label:"100 % Erneuerbare",desc:"Vollständiger Umstieg auf Wind, Solar"},{val:"b",icon:"⚡",label:"Kernkraft als Brücke",desc:"Kernenergie als Übergangslösung nutzen"},{val:"c",icon:"🪨",label:"Alle Optionen offen",desc:"Kohle, Gas, Kernkraft und Erneuerbare nach Bedarf"}],scores:{a:{cdu:0,spd:1,gruene:2,fdp:0,afd:0,bsw:0,linke:2},b:{cdu:2,spd:0,gruene:0,fdp:2,afd:1,bsw:0,linke:0},c:{cdu:1,spd:0,gruene:0,fdp:1,afd:2,bsw:1,linke:0}}},
+{id:"q09",category:"Außenpolitik",text:"Wie soll sich Deutschland in der Ukraine-Krise verhalten?",sub:"",options:[{val:"a",icon:"🕊️",label:"Diplomatie & Verhandlungen",desc:"Waffenlieferungen stoppen, auf Verhandlungen setzen"},{val:"b",icon:"🛡️",label:"Unterstützung & Diplomatie",desc:"Ukraine unterstützen, Friedensverhandlungen fördern"},{val:"c",icon:"⚔️",label:"Starke militärische Unterstützung",desc:"Maximale Unterstützung der Ukraine"}],scores:{a:{cdu:0,spd:0,gruene:0,fdp:0,afd:2,bsw:2,linke:1},b:{cdu:2,spd:2,gruene:1,fdp:1,afd:0,bsw:0,linke:1},c:{cdu:1,spd:1,gruene:2,fdp:2,afd:0,bsw:0,linke:0}}},
+{id:"q10",category:"Verteidigung",text:"Wie soll Deutschland für seine Sicherheit sorgen?",sub:"",options:[{val:"a",icon:"🏳️",label:"Weniger Militär",desc:"Rüstungsausgaben senken, Frieden durch Diplomatie"},{val:"b",icon:"🏛️",label:"NATO & starke Bundeswehr",desc:"2%-Ziel erfüllen, Bundeswehr modernisieren"},{val:"c",icon:"🪖",label:"Wehrpflicht einführen",desc:"Allgemeine Wehrpflicht, starke Landesverteidigung"}],scores:{a:{cdu:0,spd:0,gruene:0,fdp:0,afd:0,bsw:1,linke:2},b:{cdu:2,spd:2,gruene:1,fdp:2,afd:1,bsw:0,linke:0},c:{cdu:2,spd:1,gruene:0,fdp:1,afd:2,bsw:0,linke:0}}},
+{id:"q11",category:"Gesundheit",text:"Wie soll das Gesundheitssystem organisiert sein?",sub:"",options:[{val:"a",icon:"🏥",label:"Bürgerversicherung für alle",desc:"Ein System für alle, keine privaten Kassen mehr"},{val:"b",icon:"🩺",label:"Duales System verbessern",desc:"Gesetzliche und private Kassen beibehalten"},{val:"c",icon:"💼",label:"Mehr Privatisierung",desc:"Mehr Wettbewerb, private Anbieter stärken"}],scores:{a:{cdu:0,spd:2,gruene:2,fdp:0,afd:0,bsw:2,linke:2},b:{cdu:2,spd:1,gruene:0,fdp:1,afd:1,bsw:1,linke:0},c:{cdu:1,spd:0,gruene:0,fdp:2,afd:1,bsw:0,linke:0}}},
+{id:"q12",category:"Wohnen",text:"Wie soll das Wohnungsproblem gelöst werden?",sub:"",options:[{val:"a",icon:"🏗️",label:"Staatlicher Wohnungsbau",desc:"Staat baut Sozialwohnungen, Mietpreisbremse"},{val:"b",icon:"🔨",label:"Mehr bauen & regulieren",desc:"Baugenehmigungen beschleunigen, Mietpreisbremse"},{val:"c",icon:"📊",label:"Markt entlasten",desc:"Weniger Regulierung, freier Markt baut mehr"}],scores:{a:{cdu:0,spd:1,gruene:2,fdp:0,afd:0,bsw:2,linke:2},b:{cdu:2,spd:2,gruene:1,fdp:0,afd:0,bsw:1,linke:1},c:{cdu:1,spd:0,gruene:0,fdp:2,afd:2,bsw:0,linke:0}}},
+{id:"q13",category:"EU & Europa",text:"Welche Rolle soll die EU spielen?",sub:"",options:[{val:"a",icon:"🇪🇺",label:"Stärkere EU-Integration",desc:"Mehr Kompetenzen für Europa"},{val:"b",icon:"🤝",label:"Kooperative EU",desc:"EU als starke Gemeinschaft, nationale Souveränität"},{val:"c",icon:"🏴",label:"Weniger EU-Einfluss",desc:"Mehr Entscheidungen national"}],scores:{a:{cdu:0,spd:1,gruene:2,fdp:1,afd:0,bsw:0,linke:1},b:{cdu:2,spd:2,gruene:1,fdp:1,afd:0,bsw:1,linke:1},c:{cdu:0,spd:0,gruene:0,fdp:0,afd:2,bsw:2,linke:0}}},
+{id:"q14",category:"Innere Sicherheit",text:"Wie soll Deutschland innere Sicherheit gewährleisten?",sub:"",options:[{val:"a",icon:"🔐",label:"Mehr Polizei & Befugnisse",desc:"Mehr Personal, erweiterte Überwachung"},{val:"b",icon:"⚖️",label:"Balance Sicherheit & Freiheit",desc:"Sicherheit stärken ohne Bürgerrechte einzuschränken"},{val:"c",icon:"🕊️",label:"Bürgerrechte vorrang",desc:"Überwachung begrenzen, Freiheitsrechte schützen"}],scores:{a:{cdu:2,spd:0,gruene:0,fdp:0,afd:2,bsw:1,linke:0},b:{cdu:1,spd:2,gruene:1,fdp:1,afd:0,bsw:1,linke:1},c:{cdu:0,spd:1,gruene:2,fdp:2,afd:0,bsw:0,linke:2}}},
+{id:"q15",category:"Gesellschaft",text:"Welche gesellschaftliche Richtung bevorzugen Sie?",sub:"",options:[{val:"a",icon:"🌈",label:"Progressive Gesellschaft",desc:"Gleichberechtigung, LGBTQ+ Rechte, Diversität"},{val:"b",icon:"🏘️",label:"Traditionen & Wandel",desc:"Wandel ja, aber Traditionen wahren"},{val:"c",icon:"🏛️",label:"Traditionelle Werte",desc:"Familie, Heimat, nationale Identität stärken"}],scores:{a:{cdu:0,spd:1,gruene:2,fdp:1,afd:0,bsw:0,linke:2},b:{cdu:2,spd:2,gruene:1,fdp:1,afd:0,bsw:1,linke:1},c:{cdu:1,spd:0,gruene:0,fdp:0,afd:2,bsw:2,linke:0}}}
+];
+let current=0;const answers={};
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function startQuiz(){current=0;Object.keys(answers).forEach(k=>delete answers[k]);renderQuestion();showScreen('quiz');}
+function renderQuestion(){const q=QUESTIONS[current];document.getElementById('qCounter').textContent=`Frage ${current+1} von ${QUESTIONS.length}`;document.getElementById('qCategory').textContent=q.category;document.getElementById('qText').textContent=q.text;document.getElementById('qSub').textContent=q.sub||'';const grid=document.getElementById('answerGrid');grid.innerHTML='';q.options.forEach(opt=>{const btn=document.createElement('button');btn.className='answer-btn'+(answers[q.id]===opt.val?' selected':'');btn.innerHTML=`<div class="answer-icon">${opt.icon}</div><div class="answer-label"><strong>${opt.label}</strong><span>${opt.desc}</span></div>`;btn.onclick=()=>selectAnswer(opt.val);grid.appendChild(btn);});updateNavBtns();updateProgress();}
+function selectAnswer(val){const q=QUESTIONS[current];answers[q.id]=val;document.querySelectorAll('.answer-btn').forEach((btn,i)=>{btn.classList.toggle('selected',QUESTIONS[current].options[i].val===val);});document.getElementById('btnNext').classList.add('ready');}
+function updateNavBtns(){const back=document.getElementById('btnBack');const next=document.getElementById('btnNext');back.style.visibility=current===0?'hidden':'visible';next.classList.toggle('ready',!!answers[QUESTIONS[current].id]);next.textContent=current===QUESTIONS.length-1?'Ergebnis anzeigen ✓':'Weiter →';}
+function updateProgress(){const pct=((current+(answers[QUESTIONS[current].id]?1:0))/QUESTIONS.length)*100;document.getElementById('progressFill').style.width=pct+'%';}
+function prevQuestion(){if(current>0){current--;renderQuestion();}}
+function nextQuestion(){if(!answers[QUESTIONS[current].id])return;if(current<QUESTIONS.length-1){current++;renderQuestion();}else{showResults();}}
+function showResults(){document.getElementById('progressFill').style.width='100%';const scores={};PARTIES.forEach(p=>scores[p.id]=0);QUESTIONS.forEach(q=>{const val=answers[q.id];if(!val)return;const sc=q.scores[val];PARTIES.forEach(p=>{scores[p.id]+=sc[p.id];});});const maxP=QUESTIONS.length*2;const sorted=PARTIES.map(p=>({...p,score:scores[p.id],pct:Math.round((scores[p.id]/maxP)*100)})).sort((a,b)=>b.score-a.score);const winner=sorted[0];document.getElementById('winnerCard').innerHTML=`<div class="winner-card"><span class="winner-badge">🏆 Beste Übereinstimmung</span><div class="winner-emoji">${winner.emoji}</div><div class="winner-name">${winner.name}</div><div class="winner-score-label">${winner.pct} % Übereinstimmung</div><div class="winner-score-bar"><div class="winner-score-fill" id="wBar" style="width:0%"></div></div><div class="winner-desc">${winner.desc}</div></div>`;const rc=['gold','silver','bronze','','','',''];const bc={cdu:'#333',spd:'#e2001a',gruene:'#46962b',fdp:'#c8a800',afd:'#009ee0',bsw:'#9b1d91',linke:'#be3075'};document.getElementById('allResults').innerHTML=sorted.map((p,i)=>`<div class="result-row"><div class="result-rank ${rc[i]}">${i+1}</div><div class="result-emoji">${p.emoji}</div><div class="result-info"><div class="result-name">${p.name}</div><div class="result-bar-wrap"><div class="result-bar" data-w="${p.pct}" style="width:0%;background:${bc[p.id]}"></div></div></div><div class="result-pct">${p.pct} %</div></div>`).join('');document.getElementById('analysisGrid').innerHTML=QUESTIONS.map(q=>{const val=answers[q.id];const opt=q.options.find(o=>o.val===val);if(!opt)return'';const top=PARTIES.map(p=>({...p,s:q.scores[val][p.id]})).sort((a,b)=>b.s-a.s)[0];return`<div class="analysis-card"><div class="analysis-topic">${q.category}</div><div class="analysis-answer">${opt.icon} ${opt.label}</div><div class="analysis-match">Passt am besten zu: ${top.emoji} ${top.name}</div></div>`;}).join('');showScreen('result');requestAnimationFrame(()=>{setTimeout(()=>{const wb=document.getElementById('wBar');if(wb)wb.style.width=winner.pct+'%';document.querySelectorAll('.result-bar[data-w]').forEach(b=>{b.style.width=b.dataset.w+'%';});},200);});}
+function restartQuiz(){startQuiz();}
+(function(){const t=document.querySelector('[data-theme-toggle]');const r=document.documentElement;let d=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';r.setAttribute('data-theme',d);t&&t.addEventListener('click',()=>{d=d==='dark'?'light':'dark';r.setAttribute('data-theme',d);});})();
+</script>
+</body>
+</html>
